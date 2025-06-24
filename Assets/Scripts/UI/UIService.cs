@@ -1,27 +1,44 @@
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIService : MonoBehaviour
 {
-    [SerializeField] private Button test;
-
+    //[SerializeField] private ChestTypesSO chestTypesSO;
+    [SerializeField] private RectTransform initialRectTransform;
+    [SerializeField] private Button addChestButton;
+    [SerializeField] private Transform slotsParent;
+    [SerializeField] private Sprite emptySprite;
+    [SerializeField] private TextMeshProUGUI chestText;
     private void Start()
     {
-        test.onClick.AddListener(() => GameService.Instance.EventService.OnButtonClicked.InvokeEvent());
-        SubscribeToEvents();
+        initialRectTransform.gameObject.SetActive(true);
+        addChestButton.onClick.AddListener(() => GameService.Instance.EventService.OnAddChest.InvokeEvent());
+        subscribeToEvents();
     }
-    private void SubscribeToEvents()
+    private void subscribeToEvents() => GameService.Instance.EventService.OnAddChest.AddListener(onAddChest);
+    private void unSubscribeToEvents() => GameService.Instance.EventService.OnAddChest.RemoveListener(onAddChest);
+    private void onAddChest()
     {
-        GameService.Instance.EventService.OnButtonClicked.AddListener(OnButtonClicked);
+        GameService.Instance.SoundService.PlaySoundEffect(SoundType.Button_Click);
+        GameService.Instance.ChestSlotService.AddRandomChestInFirstEmptySlotController();
+        //GameService.Instance.GameplayService.AddChest(chestTypesSO);
     }
-    private void UnSubscribeToEvents()
-    {
-        GameService.Instance.EventService.OnButtonClicked.RemoveListener(OnButtonClicked);
-    }
-    private void OnButtonClicked() => GameService.Instance.SoundService.PlaySoundEffect(SoundType.Button_Click);
-    private void OnDestroy()
-    {
-        UnSubscribeToEvents();
-    }
+    private void OnDestroy() => unSubscribeToEvents();
+    
+    //public void UpdateChestSlotUI(ChestSO chestSO)
+    //{
+    //    if (chestSO == null)
+    //        return;
+    //    foreach (Transform slot in slotsParent)
+    //    {
+    //        Image chestImage = slot.GetChild(0).GetComponent<Image>();
+    //        if (chestImage != null && chestImage.sprite == emptySprite)
+    //        {
+    //            chestImage.sprite = chestSO.Closed;
+    //            break;
+    //        }
+    //    }
+    //}
 }

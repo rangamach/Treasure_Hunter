@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dae645f514e34704ea46abd5c66130d4, type: 3}
+  m_Name: AllChestTypes
+  m_EditorClassIdentifier: 
+  ChestTypes:
+  - Type: 0
+    ChestSO: {fileID: 11400000, guid: 112339415de45474988773147f5a6bef, type: 2}
+    PercentChance: 40
+  - Type: 1
+    ChestSO: {fileID: 11400000, guid: 321713c766416c843aa9a1cb06c38b31, type: 2}
+    PercentChance: 30
+  - Type: 2
+    ChestSO: {fileID: 11400000, guid: bdba86234f015af47b393e9dab9c0886, type: 2}
+    PercentChance: 20
+  - Type: 3
+    ChestSO: {fileID: 11400000, guid: f9ef8655cb8bfa745b334dfbf33dee33, type: 2}
+    PercentChance: 10
