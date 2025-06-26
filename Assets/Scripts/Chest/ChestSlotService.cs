@@ -4,9 +4,9 @@ using UnityEngine.UI;
 
 public class ChestSlotService
 {
-    private ChestSlotController chestSlotController;
+    public ChestSlotController chestSlotController { get; private set; }
 
-    public ChestSlotService(ChestTypesSO chestTypesSO, int totalSlots, List<Button> slotButtons)
+    public ChestSlotService(ChestTypesSO chestTypesSO, int totalSlots, List<SlotUI> slotButtons)
     {
         //this controller is to initialize the chest slot model.
         this.chestSlotController = new ChestSlotController(chestTypesSO, totalSlots,slotButtons);
@@ -18,11 +18,12 @@ public class ChestSlotService
         ChestSlotModel chestModel = chestSlotController.GetChestSlotModel();
         for (int i = 0; i < chestModel.TotalSlots; i++)
         {
-            if (chestModel.chestSlotControllers[i].chest == null)
+            if (chestModel.chestSlotControllers[i].GetChest() == null)
             {
-                ChestSO randomChest = GetRandomChest();
-                chestModel.chestSlotControllers[i].chest = randomChest;
-                chestModel.chestSlotControllers[i].GetStateMachine().ChangeState(ChestStates.Locked);
+                ChestSlotController slotController = chestModel.chestSlotControllers[i];
+                slotController.SetChest(GetRandomChest());
+                slotController.GetStateMachine().ChangeState(ChestStates.Locked);
+                slotController.SetChestSlotState(ChestStates.Locked);
                 break;
             }
         }
@@ -32,7 +33,6 @@ public class ChestSlotService
         float roll = Random.value * 100;
         float cumulative = 0f;
         ChestTypesSO chestTypes = chestSlotController.GetChestSlotModel().ChestTypesSO;
-
         foreach (var chest in chestTypes.ChestTypes)
         {
             cumulative += chest.PercentChance;
@@ -41,7 +41,15 @@ public class ChestSlotService
                 return chest.ChestSO;
             }
         }
-
         return chestTypes.ChestTypes[0].ChestSO;
+    }
+    public void OnSlotButtonClicked(int index)
+    {
+        ChestSlotController slotController = chestSlotController.GetChestSlotModel().chestSlotControllers[index];
+        if (slotController.GetChestSlotState() == ChestStates.Locked)
+        {
+            slotController.SetChestSlotState(ChestStates.Unlocking);
+            slotController.GetStateMachine().ChangeState(ChestStates.Unlocking);
+        }
     }
 }

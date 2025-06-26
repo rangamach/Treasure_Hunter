@@ -1,6 +1,4 @@
-using NUnit.Framework;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,9 +7,10 @@ public class ChestSlotModel
     public int TotalSlots { get; private set; }
     public ChestTypesSO ChestTypesSO { get; private set; }
     public ChestSlotController[] chestSlotControllers { get; private set; }
+    public string[] TimerTexts { get; private set; }
     public SlotButtonsSO SlotButtonsSO { get; private set; }
 
-    public ChestSlotModel(ChestTypesSO chestTypes, int totalSlots, List<Button> slotButtons)
+    public ChestSlotModel(ChestTypesSO chestTypes, int totalSlots, List<SlotUI> slotButtons)
     {
         this.TotalSlots = totalSlots;
         this.ChestTypesSO = chestTypes;
@@ -19,13 +18,18 @@ public class ChestSlotModel
 
         InitializeChestSlotControllersArray();
         InitializeSlotButtons(slotButtons);
-        //InitializeEachSlotController();
     }
     private void InitializeChestSlotControllersArray() => chestSlotControllers = new ChestSlotController[TotalSlots];
-    private void InitializeSlotButtons(List<Button> slotButtons)
+    private void InitializeSlotButtons(List<SlotUI> slotButtons)
     {
-        foreach (Button button in slotButtons)
-            SlotButtonsSO.SlotButtons.Add(button);
+        EventController[] slotButtonEvents = GameService.Instance.EventService.OnSlotButtonClickedEvents;
+        for (int i = 0;i<slotButtons.Count;i++ )
+        {
+            //slotButtons[i].onClick.AddListener(() => slotButtonEvents[i].InvokeEvent());
+            //SlotButtonsSO.SlotButtons.Add(slotButtons[i]);
+            //slotButtons[i].slotButton.onClick.AddListener(() => slotButtonEvents[i].InvokeEvent());
+            SlotButtonsSO.SlotUIList.Add(slotButtons[i]);
+        }
     }
     public void InitializeEachSlotController()
     {

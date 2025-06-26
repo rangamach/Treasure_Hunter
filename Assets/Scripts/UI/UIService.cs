@@ -1,44 +1,64 @@
+using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIService : MonoBehaviour
 {
-    //[SerializeField] private ChestTypesSO chestTypesSO;
-    [SerializeField] private RectTransform initialRectTransform;
+    [SerializeField] private RectTransform initialUI;
     [SerializeField] private Button addChestButton;
-    [SerializeField] private Transform slotsParent;
-    [SerializeField] private Sprite emptySprite;
-    [SerializeField] private TextMeshProUGUI chestText;
     private void Start()
     {
-        initialRectTransform.gameObject.SetActive(true);
-        addChestButton.onClick.AddListener(() => GameService.Instance.EventService.OnAddChest.InvokeEvent());
         subscribeToEvents();
+        invokeEvents();
+
+        initialUI.gameObject.SetActive(true);
     }
-    private void subscribeToEvents() => GameService.Instance.EventService.OnAddChest.AddListener(onAddChest);
+    private void Update()
+    {
+        if(GameService.Instance?.ChestSlotService != null)
+        {
+            foreach (ChestSlotController slotController in GameService.Instance.ChestSlotService.chestSlotController.GetChestSlotModel().chestSlotControllers)
+            {
+                if (slotController?.GetChestSlotState() == ChestStates.Unlocking)
+                {
+                    slotController.Update();
+                }
+            }
+        }
+    }
+    private void subscribeToEvents()
+    {
+        GameService.Instance.EventService.OnAddChest.AddListener(onAddChest);
+        for (int i = 0; i < GameService.Instance.ChestSlotService.chestSlotController.GetChestSlotModel().TotalSlots; i++)
+        {
+            int index = i;
+            //List<SlotUI> slotList = GameService.Instance.ChestSlotService.chestSlotController.GetChestSlotModel().SlotButtonsSO.SlotUIList;
+            GameService.Instance.EventService.OnSlotButtonClickedEvents[index].AddListener(() => onSlotButtonClicked(index));
+        }
+    }
+    private void invokeEvents()
+    {
+        addChestButton.onClick.AddListener(() => GameService.Instance.EventService.OnAddChest.InvokeEvent());
+        for(int i = 0; i<GameService.Instance.ChestSlotService.chestSlotController.GetChestSlotModel().TotalSlots;i++)
+        {
+            int index = i;
+            GameService.Instance.ChestSlotService.chestSlotController.GetChestSlotModel().SlotButtonsSO.SlotUIList[index].slotButton.onClick.AddListener(
+                () => GameService.Instance.EventService.OnSlotButtonClickedEvents[index].InvokeEvent() );
+        }
+    }
+
     private void unSubscribeToEvents() => GameService.Instance.EventService.OnAddChest.RemoveListener(onAddChest);
     private void onAddChest()
     {
         GameService.Instance.SoundService.PlaySoundEffect(SoundType.Button_Click);
         GameService.Instance.ChestSlotService.AddRandomChestInFirstEmptySlotController();
-        //GameService.Instance.GameplayService.AddChest(chestTypesSO);
+    }
+    private void onSlotButtonClicked(int index)
+    {
+        GameService.Instance.SoundService.PlaySoundEffect(SoundType.Button_Click);
+        GameService.Instance.ChestSlotService.OnSlotButtonClicked(index);
     }
     private void OnDestroy() => unSubscribeToEvents();
     
-    //public void UpdateChestSlotUI(ChestSO chestSO)
-    //{
-    //    if (chestSO == null)
-    //        return;
-    //    foreach (Transform slot in slotsParent)
-    //    {
-    //        Image chestImage = slot.GetChild(0).GetComponent<Image>();
-    //        if (chestImage != null && chestImage.sprite == emptySprite)
-    //        {
-    //            chestImage.sprite = chestSO.Closed;
-    //            break;
-    //        }
-    //    }
-    //}
 }

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,5 +8,13 @@ using UnityEngine.UI;
 public class SlotButtonsSO : ScriptableObject
 {
     [HideInInspector]
-    public List<Button> SlotButtons = new List<Button>();
+    public List<SlotUI> SlotUIList = new List<SlotUI>();
+    //public List<Button> SlotButtons = new List<Button>();
+}
+
+[Serializable]
+public class SlotUI
+{
+    public Button slotButton;
+    public TextMeshProUGUI timerText;
 }

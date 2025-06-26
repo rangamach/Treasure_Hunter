@@ -25,17 +25,17 @@ public class GameService : GenericMonoSingleton<GameService>
     //Variables:
     [Header("Variables")]
     [SerializeField] private int totalSlots;
-    [SerializeField] private List<Button> slotButtons;
+    //[SerializeField] private List<Button> slotButtons;
+    [SerializeField] private List<SlotUI> slotButtons;
     protected override void Awake()
     {
         base.Awake();
         CreateServices();
     }
-
     private void CreateServices()
     {
-        EventService = new EventService();
+        EventService = new EventService(totalSlots);
+        ChestSlotService = new ChestSlotService(allChestTypes, totalSlots, slotButtons);
         SoundService = new SoundService(soundSO, bgAudioSource, sfxAudioSource);
-        ChestSlotService = new ChestSlotService(allChestTypes, totalSlots,slotButtons);
     }
 }
