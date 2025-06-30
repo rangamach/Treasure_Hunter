@@ -21,17 +21,12 @@ public class EmptyState<T> : IState where T : ChestSlotController
 
     private void MakeButtonImageTransparent()
     {
-        //Image slotButtonImage = Owner.GetChestSlotModel().SlotButtonsSO.SlotButtons[Owner.index].gameObject.GetComponent<Image>();
         Image slotButtonImage = Owner.GetChestSlotModel().SlotButtonsSO.SlotUIList[Owner.index].slotButton.gameObject.GetComponent<Image>();
         Color slotImageColor = slotButtonImage.color;
         slotImageColor.a = 0f;
         slotButtonImage.color = slotImageColor;
-        //Color slotImageColor = slotButtonImage.color;
-        //slotImageColor.a = 0f;
-        //slotButtonImage.color = slotImageColor;
     }
     private void SetButtonInteraction(bool interaction) => Owner.GetChestSlotModel().SlotButtonsSO.SlotUIList[Owner.index].slotButton.interactable = interaction;
-    //private void SetButtonInteraction(bool interaction) => Owner.GetChestSlotModel().SlotButtonsSO.SlotButtons[Owner.index].interactable = interaction;
     private void SetChestAsNull() => Owner.SetChest(null);
 
     public void Update()

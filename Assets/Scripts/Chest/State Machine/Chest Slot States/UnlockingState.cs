@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 public class UnlockingState<T> : IState where T : ChestSlotController
 {
@@ -10,14 +12,30 @@ public class UnlockingState<T> : IState where T : ChestSlotController
 
     public void OnStateEnter()
     {
-        Owner.SetTimeRemaining(Owner.GetChest().TimerInMinutes * 60);
+        SetTimer();
     }
 
     public void OnStateExit()
     {
+        ResetTimer();
     }
 
     public void Update()
+    {
+        UpdateTimer();
+    }
+    private void SetTimer()
+    {
+        Owner.isTimerPaused = false;
+        Owner.SetTimeRemaining(Owner.GetChest().TimerInMinutes * 60);
+    }
+    private void ResetTimer()
+    {
+        Owner.SetTimeRemaining(0);
+        Owner.GetChestSlotModel().SlotButtonsSO.SlotUIList[Owner.index].timerText.text = "";
+        Owner.isTimerPaused = false;
+    }
+    private void UpdateTimer()
     {
         if (Owner.GetTimeRemaining() > 0)
         {

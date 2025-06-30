@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UnlockedState<T> : IState where T : ChestSlotController
 {
@@ -9,6 +10,7 @@ public class UnlockedState<T> : IState where T : ChestSlotController
 
     public void OnStateEnter()
     {
+        SetOpenChestSprite();
     }
 
     public void OnStateExit()
@@ -18,4 +20,5 @@ public class UnlockedState<T> : IState where T : ChestSlotController
     public void Update()
     {
     }
+    private void SetOpenChestSprite() => Owner.GetChestSlotModel().SlotButtonsSO.SlotUIList[Owner.index].slotButton.gameObject.GetComponent<Image>().sprite = Owner.GetChest().Opened;
 }

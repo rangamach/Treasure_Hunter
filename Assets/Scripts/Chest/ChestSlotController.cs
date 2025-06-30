@@ -1,19 +1,15 @@
 using System;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
-using UnityEngine;
-
 public class ChestSlotController
 {
     private static ChestSlotModel chestSlotModel;
 
     private ChestSO chest;
     public int index;
-    //private TextMeshProUGUI timerText;
     private ChestSLotStateMachine stateMachine;
     private ChestStates currentChestSlotState;
     private float timeRemaining;
+    public bool isTimerPaused;
 
     public ChestSlotController(ChestTypesSO chestTypes, int totalSlots, List<SlotUI> slotButtons)
     {
@@ -29,8 +25,11 @@ public class ChestSlotController
     private void CreateStateMachine() => stateMachine = new ChestSLotStateMachine(this);
     public void Update()
     {
-        stateMachine?.Update();
-        UpdateTimerCountdown();
+        if (!isTimerPaused)
+        {
+            stateMachine?.Update();
+            UpdateTimerCountdown();
+        }
     }
 
     private void UpdateTimerCountdown()
@@ -51,6 +50,16 @@ public class ChestSlotController
             GetChestSlotModel().SlotButtonsSO.SlotUIList[index].timerText.text = timeFormatted;
         }
     }
+    public UnityEngine.Vector2Int GetRandomCoinsAndGems()
+    {
+        UnityEngine.Vector2Int rewards = new UnityEngine.Vector2Int();
+        int coinsRewarded = GetRandomNumberInInterval(GetChest().MinCoinsReward,GetChest().MaxCoinsReward);
+        int gemsRewarded = GetRandomNumberInInterval(GetChest().MinGemsReward, GetChest().MaxGemsReward);
+        rewards.x = coinsRewarded;
+        rewards.y = gemsRewarded;
+        return rewards;
+    }
+    private int GetRandomNumberInInterval(int min,int max) => UnityEngine.Random.Range(min, max + 1);
     public ChestSlotModel GetChestSlotModel() => chestSlotModel;
     public ChestSLotStateMachine GetStateMachine() => stateMachine;
     public void SetChestSlotState(ChestStates newState) => this.currentChestSlotState = newState;

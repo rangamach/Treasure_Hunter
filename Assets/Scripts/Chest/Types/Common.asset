@@ -15,7 +15,7 @@ MonoBehaviour:
   ChestType: 0
   Opened: {fileID: -2122276175899596696, guid: 9951fca10c29b444a9c6da04e4c01c0c, type: 3}
   Closed: {fileID: -4060441317193980645, guid: 9951fca10c29b444a9c6da04e4c01c0c, type: 3}
-  TimerInMinutes: 15
+  TimerInMinutes: 1
   MinCoinsReward: 100
   MaxCoinsReward: 200
   MinGemsReward: 10
