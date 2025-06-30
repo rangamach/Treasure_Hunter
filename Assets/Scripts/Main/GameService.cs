@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameService : GenericMonoSingleton<GameService>
 {
@@ -25,7 +24,6 @@ public class GameService : GenericMonoSingleton<GameService>
     //Variables:
     [Header("Variables")]
     [SerializeField] private int totalSlots;
-    //[SerializeField] private List<Button> slotButtons;
     [SerializeField] private List<SlotUI> slotButtons;
     protected override void Awake()
     {

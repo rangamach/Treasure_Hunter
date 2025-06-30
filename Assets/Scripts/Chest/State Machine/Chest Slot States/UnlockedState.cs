@@ -1,4 +1,3 @@
-using UnityEngine;
 using UnityEngine.UI;
 
 public class UnlockedState<T> : IState where T : ChestSlotController

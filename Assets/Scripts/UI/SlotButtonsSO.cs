@@ -9,7 +9,6 @@ public class SlotButtonsSO : ScriptableObject
 {
     [HideInInspector]
     public List<SlotUI> SlotUIList = new List<SlotUI>();
-    //public List<Button> SlotButtons = new List<Button>();
 }
 
 [Serializable]
