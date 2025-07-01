@@ -348,7 +348,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Shop Buttons_0: -4681810089030355050
+      Shop Buttons_1: 8676430892181291125
+      Shop Buttons_2: 8774847842775896638
+      Shop Buttons_3: -7412148505713480575
+      Shop Buttons_4: -2322534295374574404
+      Shop Buttons_5: -7913955581463491841
+      Shop Buttons_6: -5906106406623042044
+      Shop Buttons_7: -1530449886374175168
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

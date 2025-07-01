@@ -473,7 +473,20 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Chest Slots UI_0: 6358375902320494539
+      Chest Slots UI_1: 7207141772753845415
+      Chest Slots UI_10: -939758675752008247
+      Chest Slots UI_11: -6312796274770804846
+      Chest Slots UI_12: 9083149479022659032
+      Chest Slots UI_2: -3221792912145704480
+      Chest Slots UI_3: 3887608939913215028
+      Chest Slots UI_4: -2847639065910145546
+      Chest Slots UI_5: 2850153866580213110
+      Chest Slots UI_6: -7123503029184358924
+      Chest Slots UI_7: -741497569685479388
+      Chest Slots UI_8: -5151647873898671616
+      Chest Slots UI_9: 809864414776191911
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
