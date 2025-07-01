@@ -16,6 +16,7 @@ public class UnlockingState<T> : IState where T : ChestSlotController
     public void OnStateExit()
     {
         ResetTimer();
+        GameService.Instance.SoundService.PlaySoundEffect(SoundType.Opening_Chest);
     }
 
     public void Update()

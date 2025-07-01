@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class UIService : MonoBehaviour
 {
@@ -87,22 +88,29 @@ public class UIService : MonoBehaviour
     }
     private void onAddChest()
     {
-        GameService.Instance.SoundService.PlaySoundEffect(SoundType.Button_Click);
-        GameService.Instance.ChestSlotService.AddRandomChestInFirstEmptySlotController();
+        if (!GameService.Instance.ChestSlotService.AreAllSlotsFilled())
+        {
+            GameService.Instance.SoundService.PlaySoundEffect(SoundType.Adding_Chest);
+            GameService.Instance.ChestSlotService.AddRandomChestInFirstEmptySlotController();
+        }
+        else
+            GameService.Instance.SoundService.PlaySoundEffect(SoundType.Not_Enough_Gems);
 
         DeselectSelectedButton();
     }
     private void onSlotButtonClicked(int index)
     {
-        GameService.Instance.SoundService.PlaySoundEffect(SoundType.Button_Click);
-        GameService.Instance.ChestSlotService.OnSlotButtonClicked(index);
+        if (!IsPopUpActive())
+            GameService.Instance.ChestSlotService.OnSlotButtonClicked(index);
+        else
+            GameService.Instance.SoundService.PlaySoundEffect(SoundType.Not_Enough_Gems);
         DeselectSelectedButton();
     }
 
     private static void DeselectSelectedButton() => UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
-
     public void RewardsUI(int coinsRewarded, int gemsRewarded)
     {
+        GameService.Instance.SoundService.PlaySoundEffect(SoundType.Bought);
         coinsRewardedText.text = "You have earned " + coinsRewarded.ToString() +" coins!";
         gemsRewardedText.text = "You have earned " + gemsRewarded.ToString() +" gems!";
 
@@ -115,12 +123,15 @@ public class UIService : MonoBehaviour
     }
     public void AreYouSureUI(ChestSlotController controller)
     {
-        cost = GetChestCost(controller);
-        areYouSureText.text = $"Do you want to open this chest for {cost} gems?";
+        if (!IsPopUpActive())
+        {
+            cost = GetChestCost(controller);
+            areYouSureText.text = $"Do you want to open this chest for {cost} gems?";
 
-        rewardsUI.gameObject.SetActive(false);
-        areYouSureUI.gameObject.SetActive(true);
-        EnablePopUpBG();
+            rewardsUI.gameObject.SetActive(false);
+            areYouSureUI.gameObject.SetActive(true);
+            EnablePopUpBG();
+        }
     }
     private int GetChestCost(ChestSlotController controller)
     {
@@ -149,16 +160,22 @@ public class UIService : MonoBehaviour
         coinsText.text = Coins.ToString();
         gemsText.text = Gems.ToString();
     }
-    private void onXButtonClicked() => GameService.Instance.ChestSlotService.OnXButtonClicked();
+    private void onXButtonClicked()
+    {
+        GameService.Instance.SoundService.PlaySoundEffect(SoundType.Not_Enough_Gems);
+        GameService.Instance.ChestSlotService.OnXButtonClicked();
+    }
     private void onTickButtonClicked()
     {
         ChestSlotController controller = GameService.Instance.ChestSlotService.GetSelectedChestController();
         if (Gems < cost)
         {
+            GameService.Instance.SoundService.PlaySoundEffect(SoundType.Not_Enough_Gems);
             DisableAreYouSureUI();
         }
         else if( Gems >= cost)
         {
+            GameService.Instance.SoundService.PlaySoundEffect(SoundType.Sold);
             Gems -= cost;
             SetCoinsGemsText(Coins, Gems);
             controller.GetStateMachine().ChangeState(ChestStates.Unlocked);
@@ -172,6 +189,7 @@ public class UIService : MonoBehaviour
         areYouSureUI.gameObject.SetActive(false);
         popUpBG.gameObject.SetActive(false);
     }
+    private bool IsPopUpActive() => popUpBG.gameObject.activeInHierarchy;
     private void OnDestroy() => unSubscribeToEvents();
     
 }

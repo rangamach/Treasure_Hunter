@@ -4,7 +4,6 @@ using UnityEngine;
 public class ChestSlotService
 {
     public ChestSlotController chestSlotController { get; private set; }
-
     public ChestSlotService(ChestTypesSO chestTypesSO, int totalSlots, List<SlotUI> slotButtons)
     {
         //this controller is to initialize the chest slot model.
@@ -45,18 +44,26 @@ public class ChestSlotService
     public void OnSlotButtonClicked(int index)
     {
         ChestSlotController slotController = chestSlotController.GetChestSlotModel().chestSlotControllers[index];
-        if (slotController.GetChestSlotState() == ChestStates.Locked && !CheckIfAnyChestUnlocking())
+        if (slotController.GetChestSlotState() == ChestStates.Locked)
         {
-            slotController.SetChestSlotState(ChestStates.Unlocking);
-            slotController.GetStateMachine().ChangeState(ChestStates.Unlocking);
+            if (!CheckIfAnyChestUnlocking())
+            {
+                GameService.Instance.SoundService.PlaySoundEffect(SoundType.Button_Click);
+                slotController.SetChestSlotState(ChestStates.Unlocking);
+                slotController.GetStateMachine().ChangeState(ChestStates.Unlocking);
+            }
+            else
+                GameService.Instance.SoundService.PlaySoundEffect(SoundType.Not_Enough_Gems);
         }
         else if(slotController.GetChestSlotState() == ChestStates.Unlocking)
         {
+            GameService.Instance.SoundService.PlaySoundEffect(SoundType.Button_Click);
             slotController.isTimerPaused = true;
             GameService.Instance.GetUIService().AreYouSureUI(slotController);
         }
         else if(slotController.GetChestSlotState() == ChestStates.Unlocked)
         {
+            GameService.Instance.SoundService.PlaySoundEffect(SoundType.Button_Click);
             Vector2Int rewards = slotController.GetRandomCoinsAndGems();
             GameService.Instance.GetUIService().RewardsUI(rewards.x, rewards.y);
             slotController.GetStateMachine().ChangeState(ChestStates.Empty);
@@ -89,5 +96,19 @@ public class ChestSlotService
                 return controller;
         }
         return null;
+    }
+    public bool AreAllSlotsFilled()
+    {
+        if (chestSlotController.GetChestSlotModel().chestSlotControllers[0] == null)
+            return false;
+        else
+        {
+            foreach (ChestSlotController controller in chestSlotController.GetChestSlotModel().chestSlotControllers)
+            {
+                if (controller.GetChest() == null)
+                    return false;
+            }
+        }
+        return true;
     }
 }
