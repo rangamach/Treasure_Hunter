@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ChestTypesSO", menuName = "Scriptable Objects/ChestTypesSO")]

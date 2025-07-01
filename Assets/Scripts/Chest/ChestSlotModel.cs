@@ -23,12 +23,7 @@ public class ChestSlotModel
     {
         EventController[] slotButtonEvents = GameService.Instance.EventService.OnSlotButtonClickedEvents;
         for (int i = 0;i<slotButtons.Count;i++ )
-        {
-            //slotButtons[i].onClick.AddListener(() => slotButtonEvents[i].InvokeEvent());
-            //SlotButtonsSO.SlotButtons.Add(slotButtons[i]);
-            //slotButtons[i].slotButton.onClick.AddListener(() => slotButtonEvents[i].InvokeEvent());
             SlotButtonsSO.SlotUIList.Add(slotButtons[i]);
-        }
     }
     public void InitializeEachSlotController()
     {
